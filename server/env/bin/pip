@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/home/higorgx/Área de Trabalho/Higor/Projetos/flask-vue-crud/server/env/bin/python3.9" "$0" "$@"
+'''exec' "/home/higorgx/Área de Trabalho/Higor/Projetos/DesafioUpi/server/env/bin/python3.9" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re

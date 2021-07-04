@@ -29,7 +29,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/higorgx/Área de Trabalho/Higor/Projetos/flask-vue-crud/server/env"
+set -gx VIRTUAL_ENV "/home/higorgx/Área de Trabalho/Higor/Projetos/DesafioUpi/server/env"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
