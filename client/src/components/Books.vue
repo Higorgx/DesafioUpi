@@ -4,7 +4,13 @@
       <div class="col-sm-10">
         <h1>Livros</h1>
         <hr /><br /><br />
-        <alert :message=message v-if="showMessage"></alert>
+          <b-alert
+            :show="dismissCountDown"
+            dismissible
+            @dismissed="dismissCountDown=0"
+            @dismiss-count-down="countDownChanged"
+            >{{ message }}
+          </b-alert>
         <button type="button" class="btn btn-success btn-sm" v-b-modal.book-modal>Add Livro</button>
 
         <br /><br />
@@ -37,7 +43,7 @@
                   <button
                     type="button"
                     class="btn btn-danger btn-sm"
-                    @click="onDeleteBook(book)">
+                    v-b-modal.book-delete-modal>
                     Deletar
                   </button>
                 </div>
@@ -88,7 +94,7 @@
           </b-form-checkbox-group>
         </b-form-group>
         <b-button-group>
-          <b-button type="submit" variant="primary">Enviar</b-button>
+          <b-button type="submit" variant="primary" click="ver o que chama isso">Enviar</b-button>
           <b-button type="reset" variant="danger">Restaurar</b-button>
         </b-button-group>
       </b-form>
@@ -129,12 +135,29 @@
     </b-button-group>
   </b-form>
 </b-modal>
+<b-modal ref="deleteBookModal"
+         id="book-delete-modal"
+         title="Deletar"
+         hide-footer>
+      <b-form @submit="onDeleteBook" @reset="onResetUpdate" class="w-100">
+      <button
+         type="button"
+         class="btn btn-danger btn-sm"
+         @click="onDeleteBook(book)">
+        Sim
+      </button>
+      <button
+        class="btn btn-danger btn-sm"
+        type="reset">
+        Não
+      </button>
+  </b-form>
+</b-modal>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Alert from './Alert.vue';
 
 export default {
   data() {
@@ -152,13 +175,19 @@ export default {
         read: [],
       },
       message: '',
-      showMessage: false,
+      dismissCountDown: 0,
     };
   },
   components: {
-    alert: Alert,
   },
   methods: {
+    showAlert(message) {
+      this.dismissCountDown = 5;
+      this.message = message;
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+    },
     getBooks() {
       const path = 'http://localhost:5000/books';
       axios
@@ -176,7 +205,7 @@ export default {
       axios.post(path, payload)
         .then(() => {
           this.getBooks();
-          this.message = 'Livro Adicionado!';
+          this.showAlert('Livro Adicionado!');
           this.showMessage = true;
         })
         .catch((error) => {
@@ -224,7 +253,7 @@ export default {
       axios.put(path, payload)
         .then(() => {
           this.getBooks();
-          this.message = 'Livro Atualizado';
+          this.showAlert('Livro Atualizado');
           this.showMessage = true;
         })
         .catch((error) => {
@@ -253,7 +282,7 @@ export default {
       axios.delete(path)
         .then(() => {
           this.getBooks();
-          this.message = 'Livro Deletado!';
+          this.showAlert('Livro Deletado!');
           this.showMessage = true;
         })
         .catch((error) => {
