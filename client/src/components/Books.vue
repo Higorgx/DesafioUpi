@@ -32,13 +32,13 @@
                       class="btn btn-warning btn-sm"
                       v-b-modal.book-update-modal
                       @click="editBook(book)">
-                    Update
+                    Atualizar
                   </button>
                   <button
                     type="button"
                     class="btn btn-danger btn-sm"
                     @click="onDeleteBook(book)">
-                    Delete
+                    Deletar
                   </button>
                 </div>
               </td>
@@ -99,23 +99,23 @@
          hide-footer>
       <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
       <b-form-group id="form-title-edit-group"
-                label="Title:"
+                label="Titulo:"
                 label-for="form-title-edit-input">
                 <b-form-input id="form-title-edit-input"
                     type="text"
                     v-model="editForm.title"
                     required
-                    placeholder="Enter title">
+                    placeholder="Entrar titulo">
       </b-form-input>
       </b-form-group>
       <b-form-group id="form-author-edit-group"
-                  label="Author:"
+                  label="Autor:"
                   label-for="form-author-edit-input">
         <b-form-input id="form-author-edit-input"
                       type="text"
                       v-model="editForm.author"
                       required
-                      placeholder="Enter author">
+                      placeholder="Entrar autor">
         </b-form-input>
       </b-form-group>
       <b-form-group id="form-read-edit-group">
@@ -124,8 +124,8 @@
         </b-form-checkbox-group>
     </b-form-group>
     <b-button-group>
-      <b-button type="submit" variant="primary">Update</b-button>
-      <b-button type="reset" variant="danger">Cancel</b-button>
+      <b-button type="submit" variant="primary">Atualizar</b-button>
+      <b-button type="reset" variant="danger">Cancelar</b-button>
     </b-button-group>
   </b-form>
 </b-modal>
