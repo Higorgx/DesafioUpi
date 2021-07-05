@@ -119,10 +119,9 @@
         </b-form-input>
       </b-form-group>
       <b-form-group id="form-read-edit-group">
-      <b-form-item  v-model="editForm.read" id="form-checks">
-        <input id="aCheckbox" type="checkbox" v-model="editForm.read" >
-        <label for="aCheckbox">  Lido?</label>
-      </b-form-item>
+        <b-form-checkbox-group v-model="editForm.read" id="form-checks">
+              <b-form-checkbox value="true">Lido?</b-form-checkbox>
+        </b-form-checkbox-group>
     </b-form-group>
     <b-button-group>
       <b-button type="submit" variant="primary">Update</b-button>

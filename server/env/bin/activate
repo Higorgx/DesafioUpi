@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/higorgx/Área de Trabalho/Higor/Projetos/DesafioUpi/server/env"
+VIRTUAL_ENV="/home/higorgx/Área de Trabalho/Higor/Projetos/flask-vue-crud/server/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
