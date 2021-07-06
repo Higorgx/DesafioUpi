@@ -34,10 +34,18 @@
                       @click="editBook(book)">
                     Atualizar
                   </button>
+<<<<<<< Updated upstream
                   <button
                     type="button"
                     class="btn btn-danger btn-sm"
                     @click="onDeleteBook(book)">
+=======
+                 <button
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                      v-b-modal.book-delete-modal
+                      @click="onDeleteBook(book)">
+>>>>>>> Stashed changes
                     Deletar
                   </button>
                 </div>
@@ -129,6 +137,24 @@
     </b-button-group>
   </b-form>
 </b-modal>
+<<<<<<< Updated upstream
+=======
+<b-modal ref="DeleteBookModal"
+         id="book-delete-modal"
+         title="Delete"
+         hide-footer>
+      <b-form @submit="onDeleteBook"  class="w-100">
+      <b-form-group id="form-title-edit-group"
+                label="Delete:"
+                label-for="form-title-edit-input">
+      </b-form-group>
+    <b-button-group>
+      <b-button type="submit" variant="primary">Atualizar</b-button>
+    </b-button-group>
+  </b-form>
+</b-modal>
+
+>>>>>>> Stashed changes
   </div>
 </template>
 
@@ -263,6 +289,7 @@ export default {
         });
     },
     onDeleteBook(book) {
+      this.$refs.DeleteBookModal.hide();
       this.removeBook(book.id);
     },
   },
