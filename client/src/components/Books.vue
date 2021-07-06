@@ -20,14 +20,12 @@
               <th scope="col">Titulo</th>
               <th scope="col">Autor</th>
               <th scope="col">Lido?</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(book, index) in books" :key="index">
               <td>{{ book.title }}</td>
               <td>{{ book.author }}</td>
-              <td>
               <td>
                 <span v-if="book.read">SIM</span>
                 <span v-else>NÃO</span>
@@ -57,7 +55,7 @@
             :show="true"
             >{{HasBook}}
           </b-alert>
-          <p  v-show=false v-else>{{HasBook}}</p>
+          <p  v-show="false" v-else>{{HasBook}}</p>
       </div>
     </div>
    <b-modal
@@ -175,7 +173,7 @@ export default {
         id: 'Null',
         title: '',
         author: '',
-        read: 'null',
+        read: [],
       },
       message: '',
       dismissCountDown: 0,
@@ -258,7 +256,6 @@ export default {
         author: this.BookForm.author,
         read,
       };
-      console.log(this.BookForm.id);
       this.updateBook(payload, this.BookForm.id);
     },
     updateBook(payload, bookID) {
@@ -288,7 +285,7 @@ export default {
       this.BookForm.id = '';
       this.BookForm.title = '';
       this.BookForm.author = '';
-      this.BookForm.read = 'null';
+      this.BookForm.read = [];
     },
     removeBook(bookID) {
       const path = `http://localhost:5000/books/${bookID}`;

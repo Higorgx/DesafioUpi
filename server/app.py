@@ -68,7 +68,7 @@ def remove_book(book_id):
 BOOKS = [
     {
         'id': uuid.uuid4().hex,
-        'title': 'A Arte de E-nganar',
+        'title': 'A Arte de Enganar',
         'author': 'William L. Mitnick',
         'read': True
     },
