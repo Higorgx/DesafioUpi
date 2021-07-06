@@ -53,6 +53,11 @@
             </tr>
           </tbody>
         </table>
+         <b-alert variant='danger' v-if="HasBook"
+            :show="true"
+            >{{HasBook}}
+          </b-alert>
+          <p  v-show=false v-else>{{HasBook}}</p>
       </div>
     </div>
    <b-modal
@@ -163,13 +168,14 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      HasBook: false,
       bookId: '',
       books: [],
       BookForm: {
         id: 'Null',
         title: '',
         author: '',
-        read: [],
+        read: 'null',
       },
       message: '',
       dismissCountDown: 0,
@@ -179,8 +185,10 @@ export default {
   },
   methods: {
     hasBooks() {
-      if (this.book.length === 0) {
-        console.log('Array is empty!');
+      if (this.books.length === 0) {
+        this.HasBook = 'Não há livros';
+      } else {
+        this.HasBook = '';
       }
     },
     showAlert(message) {
@@ -196,6 +204,7 @@ export default {
         .get(path)
         .then((res) => {
           this.books = res.data.books;
+          this.hasBooks();
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -209,6 +218,7 @@ export default {
           this.getBooks();
           this.showAlert('Livro Adicionado!');
           this.showMessage = true;
+          this.hasBooks();
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -278,7 +288,7 @@ export default {
       this.BookForm.id = '';
       this.BookForm.title = '';
       this.BookForm.author = '';
-      this.BookForm.read = [];
+      this.BookForm.read = 'null';
     },
     removeBook(bookID) {
       const path = `http://localhost:5000/books/${bookID}`;
