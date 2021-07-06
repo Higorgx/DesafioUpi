@@ -28,6 +28,7 @@
               <td>{{ book.title }}</td>
               <td>{{ book.author }}</td>
               <td>
+              <td>
                 <span v-if="book.read">SIM</span>
                 <span v-else>NÃO</span>
               </td>
@@ -43,7 +44,8 @@
                   <button
                     type="button"
                     class="btn btn-danger btn-sm"
-                    v-b-modal.book-delete-modal>
+                    v-b-modal.book-delete-modal
+                    @click="onShowDelete(book.id)">
                     Deletar
                   </button>
                 </div>
@@ -53,7 +55,7 @@
         </table>
       </div>
     </div>
-    <b-modal
+   <b-modal
       ref="addBookModal"
       id="book-modal"
       title="Adicionar um novo livro"
@@ -68,7 +70,7 @@
           <b-form-input
             id="form-title-input"
             type="text"
-            v-model="addBookForm.title"
+            v-model="BookForm.title"
             required
             placeholder="Titulo"
           >
@@ -82,14 +84,14 @@
           <b-form-input
             id="form-author-input"
             type="text"
-            v-model="addBookForm.author"
+            v-model="BookForm.author"
             required
             placeholder="Autor"
           >
           </b-form-input>
         </b-form-group>
         <b-form-group id="form-read-group">
-          <b-form-checkbox-group v-model="addBookForm.read" id="form-checks">
+          <b-form-checkbox-group v-model="BookForm.read" id="form-checks">
             <b-form-checkbox value="true">Lido?</b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
@@ -109,7 +111,7 @@
                 label-for="form-title-edit-input">
                 <b-form-input id="form-title-edit-input"
                     type="text"
-                    v-model="editForm.title"
+                    v-model="BookForm.title"
                     required
                     placeholder="Entrar titulo">
       </b-form-input>
@@ -119,13 +121,13 @@
                   label-for="form-author-edit-input">
         <b-form-input id="form-author-edit-input"
                       type="text"
-                      v-model="editForm.author"
+                      v-model="BookForm.author"
                       required
                       placeholder="Entrar autor">
         </b-form-input>
       </b-form-group>
       <b-form-group id="form-read-edit-group">
-        <b-form-checkbox-group v-model="editForm.read" id="form-checks">
+        <b-form-checkbox-group v-model="BookForm.read" id="form-checks">
               <b-form-checkbox value="true">Lido?</b-form-checkbox>
         </b-form-checkbox-group>
     </b-form-group>
@@ -139,19 +141,18 @@
          id="book-delete-modal"
          title="Deletar"
          hide-footer>
-      <b-form @submit="onDeleteBook" @reset="onResetUpdate" class="w-100">
-      <button
-         type="button"
-         class="btn btn-danger btn-sm"
-         @click="onDeleteBook(book)">
-        Sim
-      </button>
-      <button
-        class="btn btn-danger btn-sm"
-        type="reset">
-        Não
-      </button>
-  </b-form>
+         <b-button-group>
+          <b-button
+            variant="danger"
+            @click="onDeleteBook()">
+            Sim
+          </b-button>
+          <b-button
+            variant="primary"
+            @click="fecharModal">
+            Não
+          </b-button>
+        </b-button-group>
 </b-modal>
   </div>
 </template>
@@ -162,14 +163,10 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      bookId: '',
       books: [],
-      addBookForm: {
-        title: '',
-        author: '',
-        read: [],
-      },
-      editForm: {
-        id: '',
+      BookForm: {
+        id: 'Null',
         title: '',
         author: '',
         read: [],
@@ -181,6 +178,11 @@ export default {
   components: {
   },
   methods: {
+    hasBooks() {
+      if (this.book.length === 0) {
+        console.log('Array is empty!');
+      }
+    },
     showAlert(message) {
       this.dismissCountDown = 5;
       this.message = message;
@@ -218,10 +220,10 @@ export default {
       evt.preventDefault();
       this.$refs.addBookModal.hide();
       let read = false;
-      if (this.addBookForm.read[0]) read = true;
+      if (this.BookForm.read[0]) read = true;
       const payload = {
-        title: this.addBookForm.title,
-        author: this.addBookForm.author,
+        title: this.BookForm.title,
+        author: this.BookForm.author,
         read, // property shorthand
       };
       this.addBook(payload);
@@ -234,19 +236,20 @@ export default {
     },
 
     editBook(book) {
-      this.editForm = book;
+      this.BookForm = book;
     },
     onSubmitUpdate(evt) {
       evt.preventDefault();
       this.$refs.editBookModal.hide();
       let read = false;
-      if (this.editForm.read[0]) read = true;
+      if (this.BookForm.read[0]) read = true;
       const payload = {
-        title: this.editForm.title,
-        author: this.editForm.author,
+        title: this.BookForm.title,
+        author: this.BookForm.author,
         read,
       };
-      this.updateBook(payload, this.editForm.id);
+      console.log(this.BookForm.id);
+      this.updateBook(payload, this.BookForm.id);
     },
     updateBook(payload, bookID) {
       const path = `http://localhost:5000/books/${bookID}`;
@@ -269,13 +272,13 @@ export default {
       this.getBooks(); // why?
     },
     initForm() {
-      this.addBookForm.title = '';
-      this.addBookForm.author = '';
-      this.addBookForm.read = [];
-      this.editForm.id = '';
-      this.editForm.title = '';
-      this.editForm.author = '';
-      this.editForm.read = [];
+      this.BookForm.title = '';
+      this.BookForm.author = '';
+      this.BookForm.read = [];
+      this.BookForm.id = '';
+      this.BookForm.title = '';
+      this.BookForm.author = '';
+      this.BookForm.read = [];
     },
     removeBook(bookID) {
       const path = `http://localhost:5000/books/${bookID}`;
@@ -291,8 +294,16 @@ export default {
           this.getBooks();
         });
     },
-    onDeleteBook(book) {
-      this.removeBook(book.id);
+    onDeleteBook() {
+      this.removeBook(this.bookId);
+      this.$refs.deleteBookModal.hide();
+    },
+    onShowDelete(bookID) {
+      this.bookId = bookID;
+      console.log(this.bookId);
+    },
+    fecharModal() {
+      this.$refs.deleteBookModal.hide();
     },
   },
   created() {
