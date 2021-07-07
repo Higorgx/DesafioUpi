@@ -197,7 +197,9 @@ export default {
       axios
         .get(path)
         .then((res) => {
+          console.log(res.data.books);
           this.books = res.data.books;
+          console.log(res.data.books);
           this.hasBooks();
         })
         .catch((error) => {
