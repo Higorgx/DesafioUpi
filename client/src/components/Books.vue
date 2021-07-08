@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-10">
         <h1>Livros</h1>
-        <hr><br><br>
+        <hr><br>
         <b-alert
             :variant = "variant"
             :show="dismissCountDown"
@@ -13,7 +13,7 @@
             >{{ message }}
         </b-alert>
         <button type="button" class="btn btn-success btn-sm" v-b-modal.book-modal
-        @click="onShowModalInsert">Add Livro</button>
+        @click="onShowModalInsert">Adicionar Livro</button>
         <br><br>
         <table class="table table-hover">
           <thead>
@@ -39,16 +39,16 @@
                           class="btn btn-warning btn-sm"
                           v-b-modal.book-modal
                           @click="editBook(book)">
-                      Alterar
+                      Editar
                   </button>
                   <b-button type="button" class="btn btn-danger btn-sm"
                       @click="onShowDelete(book.id)">
-                      Excluir
+                      Remover
                   </b-button>
                 </div>
               </td>
             </tr>
-            <b-modal id="modal-del" hide-footer>
+                        <b-modal id="modal-del" hide-footer>
                     <template>
                         Excluir Livro?
                     </template>
@@ -113,7 +113,7 @@ export default {
         id: 'Null',
         title: '',
         author: '',
-        read: 'Null',
+        read: false,
       },
       message: '',
       bookId: '',
@@ -148,8 +148,6 @@ export default {
       const path = 'http://localhost:5000/books';
       axios.get(path)
         .then((res) => {
-          console.log(res.data.books);
-          console.log(this.books);
           this.books = res.data.books;
         })
         .catch((error) => {
@@ -173,7 +171,6 @@ export default {
     },
     updateBook(payload, bookID) {
       const path = `http://localhost:5000/books/${bookID}`;
-      console.log('teste');
       axios.put(path, payload)
         .then(() => {
           this.getBooks();
@@ -189,18 +186,20 @@ export default {
     initForm() {
       this.BookForm.title = '';
       this.BookForm.author = '';
-      this.BookForm.read = [];
+      this.BookForm.read = false;
       this.BookForm.id = '';
     },
     onSubmit(evt) {
       evt.preventDefault();
       this.$refs.BookModal.hide();
       let read = false;
-      if (this.BookForm.read[0]) read = true;
+      if (this.BookForm.read) {
+        read = true;
+      }
       const payload = {
         title: this.BookForm.title,
         author: this.BookForm.author,
-        read, // property shorthand
+        read,
       };
       if (this.tituloModal === 'Adicionar Livro') {
         this.addBook(payload);
@@ -223,7 +222,7 @@ export default {
       evt.preventDefault();
       this.$refs.BookModal.hide();
       this.initForm();
-      this.getBooks(); // why?
+      this.getBooks();
     },
     removeBook(bookID) {
       const path = `http://localhost:5000/books/${bookID}`;
